@@ -10,7 +10,9 @@ import { SpotifyService } from '../../services/spotify.service'
 export class HomeComponent{
 
     albumes: any[] = [];
-
+    loading: boolean;
+    error: boolean;
+    mensajeError: string;
   /*constructor(private spotify: SpotifyService) {
     this.http.get("https://restcountries.eu/rest/v2/lang/es")
     .subscribe( (data:any) => {
@@ -19,8 +21,18 @@ export class HomeComponent{
   }*/
 
   constructor( private spotify : SpotifyService ){
+    this.loading = true;
+    this.error = false;
+
     this.spotify.getNewReleases()
-    .subscribe( (data: any) => this.albumes = data);
+    .subscribe( (data: any) => {
+      this.albumes = data;
+      this.loading = false;
+    }, (errorServicio)=>{
+      this.loading = false;
+      this.error = true;
+      this.mensajeError = errorServicio.error.error.message;
+    });
   }
 
 }

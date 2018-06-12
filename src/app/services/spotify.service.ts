@@ -7,7 +7,7 @@ import { map } from "rxjs/operators";
 )
 export class SpotifyService {
 
-  auth : string = "Bearer BQDy2kg7dljjttBnZSPExpsz5K0PdQ-dCGBvFbyG1OjiUtm6IE39WneZxBFW3pNSIHegUifmicLX8VBX4NY";
+  auth : string = "Bearer BQAoWSbxXXaRcGLcMJknf0KTbO0PKrsRM4G26lSvjOMUycO00b1ixN5TTHSP96VGZOwsejlVvaVTS_ITjNU";
   constructor( private http : HttpClient) {
     console.log("servicio iniciado")
    }
@@ -26,13 +26,22 @@ export class SpotifyService {
      }));
    }
 
+   getArtistById(id:any){
+     return this.getQuery(`artists/${ id }`);
+   }
+
    getSearchArtist(termino : string){
      return this.getQuery(`search?query=${termino}&type=artist`)
      .pipe( map(data => data["artists"].items));
 
    }
 
-   updateToken(){
+   getTopTracks(id : string){
+     return this.getQuery(`artists/${ id }/top-tracks?country=us`)
+     .pipe( map( data => data["tracks"] ) );
+   }
+
+   /*updateToken(){
      const headers = new HttpHeaders({
        'grant_type'    : 'client_credentials',
        'client_id'     : '27c5dec4696a4db48ee227b80ab96bf6',
@@ -41,5 +50,5 @@ export class SpotifyService {
 
      this.http.post("https://accounts.spotify.com/api/token",{ headers })
      .subscribe(data => {console.log(data)})
-   }
+   }*/
 }
